@@ -5,7 +5,7 @@ using System;
 
 public class SocketClient : MonoBehaviour
 {
-    string host = "127.0.0.1";
+   string host = "192.168.101.101";
     int port = 8000;
     byte[] data = new byte[1024];
     NetworkStream stream;
@@ -13,17 +13,15 @@ public class SocketClient : MonoBehaviour
 
     private void Start()
     {
-        ConnectTcpServer();
         client = new TcpClient(host, port);
     }
 
-    public void ConnectTcpServer()
+    public void off()
     {
         try
         {
             stream = client.GetStream();
-
-            sendMessage("메시지 보냅니다");
+            data = sendMessage("LED 1 OFF");
             stream.Write(data, 0, data.Length);
         }
 
@@ -31,6 +29,27 @@ public class SocketClient : MonoBehaviour
         {
             Debug.Log(e);
         }
+    }
+
+    public void on()
+    {
+        try
+        {
+            stream = client.GetStream();
+            data = sendMessage("LED 1 ON");
+            stream.Write(data, 0, data.Length);
+        }
+
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    public byte[] sendMessage(String message)
+    {
+        return Encoding.UTF8.GetBytes(message);
+    }
     }
 
     public byte[] sendMessage(String message)
